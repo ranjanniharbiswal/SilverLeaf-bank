@@ -29,9 +29,11 @@
         placeholder="Email"
         name="accountEmail"
         required
-        [type]="emailInput"
+       email="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+       pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         #emailInput="ngModel"
         ngModel
+
         [ngClass]="{
           'invalid-input':
             emailInput.invalid && (emailInput.dirty || emailInput.touched)
@@ -39,9 +41,9 @@
       />
       @if(emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
       <div class="error-message">
-        @if(emailInput.errors?.['required']) { Email is required } @else if(emailInput.errors?.['email']) { Please enter a valid email address }
+        @if(emailInput.errors?.['required']) { Email is required }@else if(emailInput.errors?.['pattern']) { Enter a valid email } @else if(emailInput.errors?.['email']) { Please enter a valid email address }
       </div>
-      }
+    }
       <div class="input-wrapper">
         <input [type]="showPassword ? 'text' : 'password'" 
                placeholder="Password" 
@@ -86,11 +88,16 @@
       </div>
       }
 
-      <select name="accountType" ngModel="CURRENT">
-        <option value="CURRENT">CURRENT</option>
-        <option value="SAVINGS">SAVINGS</option>
-      </select>
+      <select name="accountType" [(ngModel)]="accountType" required>
+  <option value="" disabled selected>Account Type</option>
+  <option value="CURRENT">CURRENT</option>
+  <option value="SAVINGS">SAVINGS</option>
+</select>
 
+
+@if (!accountType) {
+  <div class="error-message">Account type is required</div>
+}
       <textarea
         name="aboutCustomer"
         placeholder="About customer"

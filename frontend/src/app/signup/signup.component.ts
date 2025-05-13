@@ -6,6 +6,7 @@
   import { ToastComponent } from '../toast/toast.component';
   import { RouterLink } from '@angular/router';
   import { CommonModule } from '@angular/common';
+  import {  NgModel, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
   
   @Component({
     selector: 'app-signup',
@@ -18,6 +19,8 @@
     accountService = inject(AccountService);
     toastHeading = ""; 
     toastDescription = ""; 
+    accountType: string = ''; // initially no selection
+
     toastVisible = false;
     showPassword: boolean = false;
     onSubmit(form: NgForm) {
