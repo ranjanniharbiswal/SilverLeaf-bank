@@ -1,0 +1,128 @@
+<header>
+  <h1>SilverLeaf Bank</h1>
+</header>
+
+<section>
+  <div class="form-header">
+    <h2>Sign up</h2>
+  </div>
+  <div class="form-body">
+    <form method="post" #signupform="ngForm" (submit)="onSubmit(signupform)">
+      <input
+        type="text"
+        placeholder="Full name"
+        name="accountHolderName"
+        required
+        #nameInput="ngModel"
+        ngModel
+        [ngClass]="{
+          'invalid-input':
+            nameInput.invalid && (nameInput.dirty || nameInput.touched)
+        }"
+      />
+      @if(nameInput.invalid && (nameInput.dirty || nameInput.touched)) {
+      <div class="error-message">Full name is required</div>
+      }
+
+      <input
+        type="email"
+        placeholder="Email"
+        name="accountEmail"
+        required
+        [type]="emailInput"
+        #emailInput="ngModel"
+        ngModel
+        [ngClass]="{
+          'invalid-input':
+            emailInput.invalid && (emailInput.dirty || emailInput.touched)
+        }"
+      />
+      @if(emailInput.invalid && (emailInput.dirty || emailInput.touched)) {
+      <div class="error-message">
+        @if(emailInput.errors?.['required']) { Email is required } @else if(emailInput.errors?.['email']) { Please enter a valid email address }
+      </div>
+      }
+      <div class="input-wrapper">
+        <input [type]="showPassword ? 'text' : 'password'" 
+               placeholder="Password" 
+               name="accountPassword" 
+               required 
+               #passwordInput="ngModel" 
+               ngModel 
+               [ngClass]="{'invalid-input': passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)}"
+               pattern="^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-={}|\[\]:;'<>,.?~])(?=.*[A-Z]).{8,16}$" />
+      
+        <span class="toggle-icon" (click)="showPassword = !showPassword">
+          {{ showPassword ? '🙈' : '👁️' }}
+        </span>
+      </div>
+      
+      @if(passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)) {
+        <div class="error-message">
+          @if(passwordInput.errors?.['required']) {
+            Password is required
+          } @else if (passwordInput.errors?.['pattern']) {
+            Password must contain at least one number, one symbol, and one capital letter and be 8–16 characters long.
+          }
+        </div>
+      }
+      <input
+        type="text"
+        placeholder="Mobile number"
+        name="contactNumber"
+        required
+        pattern="^\d{10}$"
+        #phoneInput="ngModel"
+        ngModel
+        [ngClass]="{
+          'invalid-input':
+            phoneInput.invalid && (phoneInput.dirty || phoneInput.touched)
+        }"
+      />
+      @if(phoneInput.invalid && (phoneInput.dirty || phoneInput.touched)) {
+      <div class="error-message">
+        @if(phoneInput.errors?.['required']) { Mobile number is required } @else if(phoneInput.errors?.['pattern']) { Please enter a valid 10-digit
+        mobile number }
+      </div>
+      }
+
+      <select name="accountType" ngModel="CURRENT">
+        <option value="CURRENT">CURRENT</option>
+        <option value="SAVINGS">SAVINGS</option>
+      </select>
+
+      <textarea
+        name="aboutCustomer"
+        placeholder="About customer"
+        rows="2"
+        required
+        #aboutInput="ngModel"
+        ngModel
+        [ngClass]="{
+          'invalid-input':
+            aboutInput.invalid && (aboutInput.dirty || aboutInput.touched)
+        }"
+      ></textarea>
+      @if(aboutInput.invalid && (aboutInput.dirty || aboutInput.touched)) {
+      <div class="error-message">Customer information is required</div>
+      }
+
+      <input
+        type="submit"
+        value="Sign up"
+        [disabled]="!signupform.valid"
+        [class.gray]="!signupform.valid"
+      />
+    </form>
+  </div>
+  <div class="form-footer">
+    <p>Alredy have an account?</p>
+    <a [routerLink]="'/signin'">Sign in</a>
+  </div>
+</section>
+@if(toastVisible) {
+<app-toast
+  [heading]="toastHeading"
+  [description]="toastDescription"
+></app-toast>
+}
